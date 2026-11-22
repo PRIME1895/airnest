@@ -1,8 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="AirNest Leaf Logo">
-  <rect width="512" height="512" rx="112" fill="#1B4D3E"/>
-  <circle cx="256" cy="256" r="184" fill="#23644F"/>
-  <path d="M362 142C246 146 154 222 150 340c0 16 14 28 30 24 114-26 184-106 182-222z" fill="#6EE7B7"/>
-  <path d="M168 352c44-52 104-104 176-152" stroke="#1B4D3E" stroke-width="20" stroke-linecap="round" fill="none"/>
-  <path d="M226 286c16-24 22-48 22-72" stroke="#1B4D3E" stroke-width="14" stroke-linecap="round" fill="none"/>
-  <path d="M266 254c24 2 48-4 70-16" stroke="#1B4D3E" stroke-width="14" stroke-linecap="round" fill="none"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="AirNest Leaf Logo" role="img" viewBox="0 0 512 512"><rect width="512" height="512" fill="#1B4D3E" rx="112"/><circle cx="256" cy="256" r="184" fill="#23644F"/><path fill="#6EE7B7" d="M362 142C246 146 154 222 150 340c0 16 14 28 30 24 114-26 184-106 182-222z"/><path fill="none" stroke="#1B4D3E" stroke-linecap="round" stroke-width="20" d="M168 352c44-52 104-104 176-152"/><path fill="none" stroke="#1B4D3E" stroke-linecap="round" stroke-width="14" d="M226 286c16-24 22-48 22-72"/><path fill="none" stroke="#1B4D3E" stroke-linecap="round" stroke-width="14" d="M266 254c24 2 48-4 70-16"/></svg>
