@@ -1,0 +1,160 @@
+{
+  "entities": {
+    "UserProfileDoc": {
+      "title": "UserProfileDoc",
+      "description": "Private user clean-air profile with approximate grid location only (no exact street address).",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "city": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "region": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "approxLat": {
+          "type": "number"
+        },
+        "approxLng": {
+          "type": "number"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["en", "hi", "ta"]
+        },
+        "budget": {
+          "type": "string",
+          "enum": ["low", "moderate", "flexible"]
+        },
+        "homeType": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "roomAreaM2": {
+          "type": "number"
+        },
+        "commuteMode": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "cookingFuel": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "eli10Mode": {
+          "type": "boolean"
+        },
+        "elderMode": {
+          "type": "boolean"
+        },
+        "alertsOptIn": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerId",
+        "displayName",
+        "city",
+        "region",
+        "approxLat",
+        "approxLng",
+        "language",
+        "budget",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DailyProgressDoc": {
+      "title": "DailyProgressDoc",
+      "description": "User daily clean-air routine completion record.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "dateKey": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "completedIds": {
+          "type": "array",
+          "description": "Bounded list of completed plan task IDs (max 12)"
+        },
+        "estimatedCo2eSavedKg": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "dateKey", "completedIds", "estimatedCo2eSavedKg", "createdAt", "updatedAt"]
+    },
+    "CommunityAggregateDoc": {
+      "title": "CommunityAggregateDoc",
+      "description": "Aggregate-only city clean air challenge totals (strictly zero PII).",
+      "type": "object",
+      "properties": {
+        "city": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "participants": {
+          "type": "number"
+        },
+        "co2eAvoidedTonnes": {
+          "type": "number"
+        },
+        "goalProgressPct": {
+          "type": "number"
+        }
+      },
+      "required": ["city", "participants", "co2eAvoidedTonnes", "goalProgressPct"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfileDoc" },
+      "description": "Owner-only private clean-air profile."
+    },
+    "/users/{userId}/dailyProgress/{progressId}": {
+      "schema": { "$ref": "#/entities/DailyProgressDoc" },
+      "description": "Owner-only daily plan completion records under parent user profile."
+    },
+    "/communityAggregates/{cityId}": {
+      "schema": { "$ref": "#/entities/CommunityAggregateDoc" },
+      "description": "Read-only aggregate city clean-air metrics with zero personal information."
+    }
+  }
+}

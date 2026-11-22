@@ -1,0 +1,58 @@
+[
+  {
+    "id": "kb-n95-severe",
+    "topic": "N95 Mask & Severe Smog (AQI > 300)",
+    "tags": ["n95", "mask", "severe", "smog", "aqi>300", "outdoor", "asthma"],
+    "costTag": "₹",
+    "summary": "When outdoor AQI exceeds 300 (Very Poor / Severe), cloth and surgical masks leak most PM2.5 particles. Wear a well-fitted N95, KN95, or FFP2 respirator without an exhalation valve during essential outdoor trips. Keep children and elders indoors whenever possible.",
+    "citation": "WHO & Indian Council of Medical Research (ICMR) Air Pollution Guidance"
+  },
+  {
+    "id": "kb-inversion-ventilation",
+    "topic": "Thermal Inversion & Ventilation Timing",
+    "tags": ["ventilation", "windows", "inversion", "boundary layer", "morning", "evening"],
+    "costTag": "₹0",
+    "summary": "During winter mornings and nights, cold air traps pollutants under a shallow planetary boundary layer (<300m) with low wind (<6 km/h). Keep windows closed and place rolled damp cloths at door gaps during peaks (₹0). Open windows for 15–20 minutes in mid-afternoon when sunlight raises the boundary layer and AQI dips.",
+    "citation": "CPCB Winter Smog Dispersion Advisory & SAFAR India"
+  },
+  {
+    "id": "kb-cr-box",
+    "topic": "DIY Corsi-Rosenthal Air Filter Box (5 Steps)",
+    "tags": ["diy", "corsi-rosenthal", "cr box", "filter", "purifier", "low cost", "cadr"],
+    "costTag": "₹",
+    "summary": "A DIY Corsi-Rosenthal Box delivers 450–600 m³/h CADR for ₹2,200–₹3,500: (1) Gather 4 MERV-13 or replacement HEPA filters + 1 standard 40cm box fan + duct tape + cardboard base. (2) Tape the 4 filters into an open cube with arrows pointing inward. (3) Seal the cardboard base to the bottom. (4) Tape the box fan on top blowing UPWARD. (5) Cut a circular shroud ring on top to boost airflow by ~20%.",
+    "citation": "UC Davis Engineering & UL Chemical Insights CADR Validation (2023)"
+  },
+  {
+    "id": "kb-myth-ozone",
+    "topic": "Myth-Busting: Ozone Purifiers & Indoor Plants",
+    "tags": ["myth", "ozone", "ionizer", "plants", "purifier", "safe"],
+    "costTag": "₹0",
+    "summary": "AVOID ozone-generating air purifiers and high-output ionizers: ground-level ozone irritates airways and worsens asthma. Use mechanical HEPA H13 or MERV-13 filtration only. Also, while indoor plants improve well-being, studies show you would need 100+ plants per m² to match one small HEPA filter for PM2.5.",
+    "citation": "US EPA Guide to Air Cleaners in the Home & Drexel University Plant Study"
+  },
+  {
+    "id": "kb-cooking-cleaning",
+    "topic": "Low-Emission Cooking & Wet-Mop Cleaning",
+    "tags": ["cooking", "kitchen", "lpg", "induction", "cleaning", "incense", "mop"],
+    "costTag": "₹0",
+    "summary": "High-heat frying and tadka can spike indoor PM2.5 above 300 µg/m³. Cover pans with lids, run kitchen exhaust fans while cooking and 10 minutes after, avoid incense sticks and mosquito coils during smog days, and wet-mop floors instead of dry sweeping to keep settled dust out of the air.",
+    "citation": "WHO Household Fuel Combustion & Indoor PM2.5 Guidance"
+  },
+  {
+    "id": "kb-no-burning",
+    "topic": "Zero Waste, Leaf, or Coal Burning",
+    "tags": ["burning", "waste", "leaves", "coal", "angithi", "heating", "grap"],
+    "costTag": "₹0",
+    "summary": "Never burn dry leaves, garbage, wood, or charcoal braziers (angithi) indoors or in neighborhoods. Burning 1 kg of dry waste emits up to 18 g of toxic PM2.5 and carbon monoxide. Compost leaves, report municipal open burning under CPCB GRAP, and use warm layered clothing (₹0) or electric heaters instead.",
+    "citation": "CPCB Graded Response Action Plan (GRAP) & National Clean Air Programme"
+  },
+  {
+    "id": "kb-medical-escalation",
+    "topic": "Medical Safety & Severe Symptom Escalation",
+    "tags": ["medical", "asthma", "chest pain", "breathless", "wheezing", "emergency", "doctor"],
+    "costTag": "₹0",
+    "summary": "AirNest does not diagnose medical conditions. If you or a family member experience severe shortness of breath, chest pain or tightness, bluish lips/nails, dizziness, or asthma symptoms that do not improve after using a prescribed reliever inhaler, call emergency medical services (112 / 108 in India) or visit the nearest emergency clinic immediately.",
+    "citation": "WHO Emergency Respiratory Triage Guidelines"
+  }
+]

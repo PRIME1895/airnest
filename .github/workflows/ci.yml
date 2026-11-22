@@ -1,0 +1,44 @@
+name: AirNest CI Quality & Security Gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Secret Scan (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: false
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Strict Check
+        run: npm run lint
+
+      - name: Firestore Security Rules Lint
+        run: npm run lint:rules
+
+      - name: Unit, Integration & Rules Tests
+        run: npm test && npx tsx --test tests/firestore.rules.test.ts
+
+      - name: LLM Safety, Injection & Grounding Evals (36 cases)
+        run: npm run evals
+
+      - name: Production Build
+        run: npm run build
+
+      - name: Dependency Vulnerability Audit
+        run: npm audit --audit-level=high

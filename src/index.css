@@ -1,0 +1,247 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Tamil', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --airnest-canvas: #f3f8f5;
+    --airnest-surface: #ffffff;
+    --airnest-surface-soft: #eaf4ee;
+    --airnest-border: #d8e8df;
+    --airnest-ink: #122620;
+    --airnest-ink-muted: #49635a;
+    --airnest-pine: #1b4d3e;
+    --airnest-pine-hover: #143d30;
+    --airnest-leaf: #2d8a56;
+  }
+
+  .dark {
+    --airnest-canvas: #0b1612;
+    --airnest-surface: #13221c;
+    --airnest-surface-soft: #192e25;
+    --airnest-border: #253f34;
+    --airnest-ink: #edf7f2;
+    --airnest-ink-muted: #a6c2b6;
+    --airnest-pine: #2d8a56;
+    --airnest-pine-hover: #38a169;
+    --airnest-leaf: #4ade80;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  html.elder-mode {
+    font-size: 118.75%;
+  }
+
+  html.high-contrast {
+    --airnest-border: #0f241d;
+    --airnest-ink-muted: #1b342b;
+  }
+
+  html.dark.high-contrast {
+    --airnest-border: #86efac;
+    --airnest-ink-muted: #d1fae5;
+  }
+
+  body {
+    background-color: var(--airnest-canvas);
+    color: var(--airnest-ink);
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    outline-offset: 2px;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid #1b4d3e;
+  }
+
+  .dark button:focus-visible,
+  .dark a:focus-visible,
+  .dark input:focus-visible,
+  .dark select:focus-visible,
+  .dark textarea:focus-visible {
+    outline: 3px solid #4ade80;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.font-mono-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Serene botanical header backdrop inspired by AirNest visual references */
+.airnest-sky-backdrop {
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 0%, rgba(186, 230, 212, 0.55) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 15% 10%, rgba(219, 240, 229, 0.7) 0%, transparent 60%),
+    linear-gradient(180deg, #e5f3ec 0%, #f3f8f5 100%);
+}
+
+.dark .airnest-sky-backdrop {
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 0%, rgba(45, 138, 86, 0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 15% 10%, rgba(27, 77, 62, 0.22) 0%, transparent 60%),
+    linear-gradient(180deg, #0f2019 0%, #0b1612 100%);
+}
+
+/* Official Google Sign-In button styling per Workspace skill */
+.gsi-material-button {
+  background-color: #ffffff;
+  border: 1px solid #747775;
+  border-radius: 8px;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.gsi-material-button:hover {
+  background-color: #f8faf9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.dark .gsi-material-button {
+  background-color: #13221c;
+  border-color: #46695a;
+  color: #edf7f2;
+}
+
+.dark .gsi-material-button:hover {
+  background-color: #1b3128;
+}
+
+/* Hackathon-grade GPU-accelerated motion utilities */
+@keyframes airnest-float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(4deg); }
+}
+
+@keyframes airnest-float-alt {
+  0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+  50% { transform: translateY(8px) translateX(6px) rotate(-5deg); }
+}
+
+@keyframes airnest-orb-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(18px, -12px, 0) scale(1.06); }
+}
+
+@keyframes airnest-section-spotlight {
+  0% { box-shadow: 0 0 0 0 rgba(31, 138, 76, 0.38); transform: translateY(6px); }
+  45% { box-shadow: 0 0 0 12px rgba(31, 138, 76, 0.08); transform: translateY(0); }
+  100% { box-shadow: 0 0 0 0 rgba(31, 138, 76, 0); transform: translateY(0); }
+}
+
+@keyframes airnest-stage-enter {
+  0% { opacity: 0; transform: translateY(14px) scale(0.985); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes airnest-breath-ring {
+  0% { transform: scale(0.65); opacity: 0.75; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes airnest-progress-fill {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes airnest-shimmer {
+  0% { transform: translateX(-120%) skewX(-18deg); }
+  100% { transform: translateX(260%) skewX(-18deg); }
+}
+
+.animate-airnest-float {
+  animation: airnest-float-slow 6.5s ease-in-out infinite;
+}
+
+.animate-airnest-float-alt {
+  animation: airnest-float-alt 8s ease-in-out infinite;
+}
+
+.animate-airnest-orb {
+  animation: airnest-orb-drift 11s ease-in-out infinite;
+}
+
+.animate-airnest-stage-enter {
+  animation: airnest-stage-enter 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-airnest-spotlight {
+  animation: airnest-section-spotlight 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-airnest-breath-ring {
+  animation: airnest-breath-ring 1.15s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.animate-airnest-progress {
+  transform-origin: left center;
+  animation: airnest-progress-fill 680ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.airnest-shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.airnest-shimmer-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+  transform: translateX(-120%) skewX(-18deg);
+  pointer-events: none;
+}
+
+.airnest-shimmer-btn:hover::after {
+  animation: airnest-shimmer 750ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

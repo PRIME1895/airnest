@@ -1,0 +1,6 @@
+{
+  "name": "AirNest",
+  "description": "GenAI assistant for winter smog and urban air pollution that turns live AQI into personalized low-emission daily plans, indoor air hacks, and quantified personal, household, and community impact.",
+  "requestFramePermissions": ["geolocation", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,166 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pillar 4.1: Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Pillar 3: Hardened global primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Pillar 2: Standalone Validation Blueprint for UserProfileDoc
+    function isValidUserProfile(data) {
+      return data.keys().hasAll([
+          'ownerId', 'displayName', 'city', 'region',
+          'approxLat', 'approxLng', 'language', 'budget',
+          'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'ownerId', 'displayName', 'city', 'region',
+          'approxLat', 'approxLng', 'language', 'budget',
+          'homeType', 'roomAreaM2', 'commuteMode', 'cookingFuel',
+          'eli10Mode', 'elderMode', 'alertsOptIn',
+          'createdAt', 'updatedAt'
+        ])
+        && data.ownerId is string
+        && data.ownerId == request.auth.uid
+        && isValidId(data.ownerId)
+        && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 60
+        && data.city is string && data.city.size() >= 1 && data.city.size() <= 80
+        && data.region is string && data.region.size() >= 1 && data.region.size() <= 80
+        && data.approxLat is number && data.approxLat >= -90 && data.approxLat <= 90
+        && data.approxLng is number && data.approxLng >= -180 && data.approxLng <= 180
+        && data.language in ['en', 'hi', 'ta']
+        && data.budget in ['low', 'moderate', 'flexible']
+        && (!('homeType' in data) || (data.homeType is string && data.homeType.size() <= 40))
+        && (!('roomAreaM2' in data) || (data.roomAreaM2 is number && data.roomAreaM2 >= 8 && data.roomAreaM2 <= 300))
+        && (!('commuteMode' in data) || (data.commuteMode is string && data.commuteMode.size() <= 40))
+        && (!('cookingFuel' in data) || (data.cookingFuel is string && data.cookingFuel.size() <= 40))
+        && (!('eli10Mode' in data) || data.eli10Mode is bool)
+        && (!('elderMode' in data) || data.elderMode is bool)
+        && (!('alertsOptIn' in data) || data.alertsOptIn is bool)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Pillar 2 & 5: Standalone Validation Blueprint for DailyProgressDoc with bounded array guard
+    function isValidDailyProgress(data) {
+      return data.keys().hasAll([
+          'ownerId', 'dateKey', 'completedIds', 'estimatedCo2eSavedKg', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'ownerId', 'dateKey', 'completedIds', 'estimatedCo2eSavedKg', 'createdAt', 'updatedAt'
+        ])
+        && data.ownerId is string
+        && data.ownerId == request.auth.uid
+        && isValidId(data.ownerId)
+        && data.dateKey is string
+        && data.dateKey.size() == 10
+        && data.dateKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && data.completedIds is list
+        && data.completedIds.size() <= 12
+        && (data.completedIds.size() == 0 || (data.completedIds[0] is string && data.completedIds[0].size() <= 64))
+        && data.estimatedCo2eSavedKg is number
+        && data.estimatedCo2eSavedKg >= 0
+        && data.estimatedCo2eSavedKg <= 500
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    // Private User Profiles (Pillar 6: PII Isolation)
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if false;
+      allow create: if isVerified()
+        && isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isVerified()
+        && isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming())
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          incoming().diff(existing()).affectedKeys().hasOnly([
+            'displayName', 'city', 'region', 'approxLat', 'approxLng',
+            'language', 'budget', 'homeType', 'roomAreaM2',
+            'commuteMode', 'cookingFuel', 'eli10Mode', 'elderMode',
+            'alertsOptIn', 'updatedAt'
+          ])
+        );
+      allow delete: if isVerified() && isValidId(userId) && isOwner(userId);
+
+      // Pillar 1: Master Gate subcollection under parent user
+      match /dailyProgress/{progressId} {
+        allow get: if isValidId(userId) && isValidId(progressId) && isOwner(userId);
+        // Pillar 8: Secure List Query evaluating resource.data without get()
+        allow list: if isOwner(userId) && resource.data.ownerId == request.auth.uid;
+        allow create: if isVerified()
+          && isValidId(userId)
+          && isValidId(progressId)
+          && isOwner(userId)
+          && isValidDailyProgress(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isVerified()
+          && isValidId(userId)
+          && isValidId(progressId)
+          && isOwner(userId)
+          && isValidDailyProgress(incoming())
+          && incoming().ownerId == existing().ownerId
+          && incoming().dateKey == existing().dateKey
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId))
+          && (
+            incoming().diff(existing()).affectedKeys().hasOnly([
+              'completedIds', 'estimatedCo2eSavedKg', 'updatedAt'
+            ])
+          );
+        allow delete: if isVerified() && isValidId(userId) && isValidId(progressId) && isOwner(userId);
+      }
+    }
+
+    // Aggregate-only community stats: strictly zero PII, read-only for clients
+    match /communityAggregates/{cityId} {
+      allow get: if isValidId(cityId);
+      allow list: if true;
+      allow write: if false;
+    }
+
+    // Connectivity probe document (read-only)
+    match /test/connection {
+      allow get: if true;
+      allow write: if false;
+    }
+  }
+}
